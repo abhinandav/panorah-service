@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from views import router as communication_router
+from api.views import router as communication_router
 
 
 app = FastAPI(title="Communication API")
