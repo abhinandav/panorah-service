@@ -3,23 +3,35 @@ from typing import List, Optional
 from services import sms_service,call_service,email_service,whatsapp_service
 from schemas import SMSRequest,CallRequest,EmailRequest,WhatsAppRequest
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from config.database import engine
+from loguru import logger
 
 router = APIRouter(prefix="/connect", tags=["Communication"])
 
 
 
-async def save_to_db(data:dict ):
+async def save_to_db(data: dict):
     columns = ", ".join(data.keys())
     values = ", ".join(f":{key}" for key in data.keys())
-        
+
     sql = text(f"""
-            INSERT INTO communication_document ({columns})
-            VALUES ({values})
-            RETURNING id;
-        """)
-    with engine.begin() as conn:
-        conn.execute(sql, data)
+        INSERT INTO communications_document ({columns})
+        VALUES ({values})
+        RETURNING id;
+    """)
+
+    try:
+        with engine.begin() as conn:
+            result = conn.execute(sql, data)
+            inserted_id = result.scalar()  # Fetch the inserted ID
+        return inserted_id
+    except SQLAlchemyError as e:
+        logger.error(f"Database error: {e}")
+        return None  # Return None to indicate failure
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        return None
 
 
 @router.post("/send_sms")
