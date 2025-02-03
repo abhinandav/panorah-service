@@ -7,6 +7,5 @@ python-dotenv
 alembic
 twilio
 psycopg2-binary
-psycopg2
 sqlacodegen
 heyoo
