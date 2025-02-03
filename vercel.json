@@ -1,14 +1,14 @@
 {
-  "functions": {
-    "main.py": {
-      "runtime": "@vercel/python",
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/main.py"
+      "dest": "main.py"
     }
   ]
 }
