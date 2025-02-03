@@ -6,7 +6,7 @@ httpx
 python-dotenv
 alembic
 twilio
-asyncpg 
+psycopg2-binary
 psycopg2
 sqlacodegen
 heyoo
